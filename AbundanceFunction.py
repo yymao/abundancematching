@@ -98,6 +98,13 @@ def rematch(catalog1, catalog2, greatest_first=True, \
     arr1[f[s[len(arr2):]]] = np.nan
     return arr1
 
+def _to_float(x, default=np.nan):
+    try:
+        xf = float(x)
+    except (ValueError, TypeError):
+        return default
+    return xf
+
 class AbundanceFunction:
     def __init__(self, x, phi, ext_range=(None, None), nbin=1000, \
             faint_end_first=False, faint_end_slope='fit', \
@@ -160,8 +167,8 @@ class AbundanceFunction:
             faint_end_fit_points = 0
 
         ext_min, ext_max = ext_range
-        ext_min = float(ext_min or x[0])
-        ext_max = float(ext_max or x[-1])
+        ext_min = _to_float(ext_min, x[0])
+        ext_max = _to_float(ext_max, x[-1])
 
         if faint_end_first:
             x = x[::-1]

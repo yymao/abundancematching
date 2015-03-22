@@ -1,6 +1,13 @@
 __all__ = ['HaloAbundanceFunction', 'calc_number_densities', 'calc_number_densities_in_bins']
 import numpy as np
 
+def _to_float(x, default=np.nan, take_log=False):
+    try:
+        xf = float(x)
+    except (ValueError, TypeError):
+        return default
+    return np.log(xf) if take_log else xf
+
 def calc_number_densities(x, box_size):
     """
     Calculate the number densities for a list of values.
@@ -79,21 +86,13 @@ class HaloAbundanceFunction:
         x = x[np.isfinite(x)]
 
         fit_to, fit_below = fit_range
-        fit_to = float(fit_to or x.min())
-        fit_below = float(fit_below or x.min())
-           
-        if fit_to >= fit_below:
-            fit_range = None
-        elif log_bins:
-            if fit_range[0]:
-                fit_to = np.log(fit_to)
-            if fit_range[1]:
-                fit_below = np.log(fit_below)
+        fit_to = _to_float(fit_to, x.min(), log_bins)
+        fit_below = _to_float(fit_below, x.min(), log_bins)
 
         bins = np.linspace(min(x.min(), fit_to), x.max(), int(nbin)+1)
         nd = calc_number_densities_in_bins(x, box_size, bins)
  
-        if fit_range is not None:
+        if fit_to < fit_below:
             dlog_nd = np.gradient(np.log(nd))
             dx = (bins[-1]-bins[0])/int(nbin)
             k = np.searchsorted(bins, fit_below)

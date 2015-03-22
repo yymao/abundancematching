@@ -23,7 +23,7 @@ Here's an example to do abundance matching with this code.
     
     import matplotlib.pyploy as plt
     from AbundanceMatching import *
-    af = AbundanceFunction(lf[:,0], table[:,1], (-27, -5))
+    af = AbundanceFunction(lf[:,0], lf[:,1], (-27, -5))
     
     #check the abundance function
     plt.semilogy(lf[:,0], lf[:,1])
