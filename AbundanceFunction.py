@@ -168,7 +168,7 @@ class AbundanceFunction:
             phi_log = phi_log[::-1]
             ext_min, ext_max = ext_max, ext_min
         
-        x_new = np.linspace(*ext_range, num=int(nbin)+1)
+        x_new = np.linspace(ext_min, ext_max, num=int(nbin)+1)
         dx = _diff(x)
         if all(dx > 0): #like luminosity
             self._x_flipped = False
