@@ -137,7 +137,7 @@ class AbundanceFunction:
         -----
         To do abundance matching, see member functions `deconvolute` 
         and `match`.
-        """`
+        """
         x = np.ravel(x)
         phi_log = np.log(phi).flatten()
         
