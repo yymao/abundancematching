@@ -277,7 +277,8 @@ class AbundanceFunction:
                 raise ValueError('Please run deconvolute first!')
         else:
             xp = self._x
-        return np.interp(x, xp[self._s], self._nd_log[self._s], np.nan, np.nan)
+        return np.exp(np.interp(x, xp[self._s], self._nd_log[self._s], \
+                np.nan, np.nan))
 
     def match(self, nd, scatter=0, do_add_scatter=True, do_rematch=True):
         """
