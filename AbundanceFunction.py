@@ -251,6 +251,34 @@ class AbundanceFunction:
         return np.exp(np.interp(x, self._x[self._s], self._phi_log[self._s], \
                 np.nan, np.nan))
 
+    def number_density_at(self, x, scatter=0):
+        """
+        The number density at x, i.e. return nd(x).
+
+        Parameters
+        ----------
+        x : array_like
+            The abundance proxy, usually is magnitude or log(stellar mass).
+        scatter : float, optional
+            If not zero, it uses an abundance function that has been 
+            deconvoluted with this amount of scatter. 
+            Must run `deconvolute` before calling this function.
+
+        Returns
+        -------
+        nd : array_like
+            Number densities.
+        """
+        scatter = float(scatter)
+        if scatter > 0:
+            try:
+                xp = self._x_deconv[scatter]
+            except (KeyError):
+                raise ValueError('Please run deconvolute first!')
+        else:
+            xp = self._x
+        return np.interp(x, xp[self._s], self._nd_log[self._s], np.nan, np.nan)
+
     def match(self, nd, scatter=0, do_add_scatter=True, do_rematch=True):
         """
         Abundance matching: match number density to x, i.e. return x(nd).
