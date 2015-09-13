@@ -8,7 +8,7 @@ import os
 from subprocess import check_call
 
 def make():
-    here = os.path.abspath(path.dirname(__file__))
+    here = os.path.abspath(os.path.dirname(__file__))
     cwd = os.getcwd()
     os.chdir(os.path.join(here, 'fiducial_deconvolute'))
     check_call(['make'])
