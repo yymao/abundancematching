@@ -5,7 +5,7 @@ A python module to create (interpolate and extrapolate) abundance functions and 
 
 ## Installation
 
-    pip install git+git://bitbucket.org/yymao/abundancematching.git
+    pip install git+ssh://git@bitbucket.org/yymao/abundancematching.git
 
 
 ## Example
@@ -48,4 +48,3 @@ Here's an example to do abundance matching with this code.
         catalog_this = add_scatter(catalog_deconv, scatter*LF_SCATTER_MULT)
         catalog_this = rematch(catalog_this, catalog, af._x_flipped)
         # do something with catalog_this
-
