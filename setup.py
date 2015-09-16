@@ -7,18 +7,17 @@ from setuptools import setup, find_packages
 import os
 from subprocess import check_call
 
-def make():
-    here = os.path.abspath(os.path.dirname(__file__))
-    cwd = os.getcwd()
-    os.chdir(os.path.join(here, 'fiducial_deconvolute'))
-    check_call(['make'])
-    os.chdir(cwd)
 
-make()
+_make_pre = 'gcc -D_BSD_SOURCE -D_POSIX_SOURCE -D_POSIX_C_SOURCE=200809L -D_SVID_SOURCE -D_DARWIN_C_SOURCE -Wall -fno-math-errno -fPIC -shared'.split()
+_make_post = '-lm -O3 -std=c99'.split()
+here = os.path.abspath(os.path.dirname(__file__))
+cpath = os.path.join(here, 'AbundanceMatching', 'fiducial_deconvolute')
+check_call(_make_pre + [cpath+'.c', '-o', cpath+'.so'] + _make_post)
+
 
 setup(
     name='AbundanceMatching',
-    version='0.1.0',
+    version='0.1.1',
     description='A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution (with Peter Behroozi\'s implmentation) and abundance matching.',
     url='https://bitbucket.org/yymao/abundancematching',
     author='Yao-Yuan Mao, Peter Behroozi',
@@ -34,9 +33,9 @@ setup(
         'Topic :: Scientific/Engineering :: Astronomy',
     ],
     use_2to3=True,
-    packages=find_packages(),
+    packages=['AbundanceMatching'],
     package_data={
-        'fiducial_deconvolute': ['fiducial_deconvolute.so'],
+        'AbundanceMatching': ['fiducial_deconvolute.so'],
     },
     install_requires = ['numpy','scipy'],
 )

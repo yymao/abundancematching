@@ -3,7 +3,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 try:
-    from fiducial_deconvolute import fiducial_deconvolute, af_dtype
+    from fiducial_deconv_wrapper import fiducial_deconvolute
 except (OSError, ImportError):
     _has_fiducial_deconvolute = False
 else:
@@ -351,20 +351,21 @@ class AbundanceFunction:
         if not _has_fiducial_deconvolute:
             raise NotImplementedError('Make sure you compliled fiducial_deconvolute.')
 
-        af = np.empty(len(self._x), af_dtype)
-        af['key'][::-1] = self._x
+        af_key = np.empty(len(self._x), float)
+        af_val = np.empty_like(af_key)
+        af_key[::-1] = self._x
         if not self._x_flipped:
-            af['key'] *= -1.0
-        af['val'][::-1] = self._phi_log
-        af['val'] /= np.log(10.0)
+            af_key *= -1.0
+        af_val[::-1] = self._phi_log
+        af_val /= np.log(10.0)
 
-        smm = np.empty(len(af), float)
-        mf = np.empty_like(smm)
+        smm = np.empty_like(af_key)
+        mf = np.empty_like(af_key)
         smm[::-1] = self._x
         mf[::-1] = np.gradient(np.exp(self._nd_log))
         if not self._x_flipped:
             smm *= -1.0
-        smm = fiducial_deconvolute(af, smm, mf, scatter, repeat, sm_step)
+        smm = fiducial_deconvolute(af_key, af_val, smm, mf, scatter, repeat, sm_step)
         if not self._x_flipped:
             smm *= -1.0
         smm = smm[::-1]
