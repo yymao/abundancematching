@@ -29,8 +29,7 @@ def calc_number_densities(x, box_size):
     N = len(x)
     inv_vol = 1.0/(box_size**3)
     nd = np.empty(N, dtype=np.float64)
-    nd[np.argsort(x)] \
-            = np.linspace(N*inv_vol, inv_vol, N, dtype=np.float64)
+    nd[np.argsort(x)] = np.linspace(N*inv_vol, inv_vol, N)
     return nd
 
 def calc_number_densities_in_bins(x, box_size, bins):
