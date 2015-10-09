@@ -1,12 +1,11 @@
 # AbundanceMatching
 
-A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution (with Peter Behroozi's implmentation) and abundance matching.
+A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution (with Peter Behroozi's implementation) and abundance matching.
 
 
 ## Installation
 
-    pip install git+ssh://git@bitbucket.org/yymao/abundancematching.git
-
+    pip install https://bitbucket.org/yymao/abundancematching/get/master.zip
 
 ## Example
 
