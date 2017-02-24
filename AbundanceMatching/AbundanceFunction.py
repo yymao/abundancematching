@@ -47,11 +47,10 @@ def add_scatter(x, scatter, in_place=False):
     x : array_like
         x with the added scatter.
     """
-    if in_place:
-        x += np.random.randn(*x.shape)*float(scatter)
-    else:
-        x = np.asarray(x)
-        x = x + np.random.randn(*x.shape)*float(scatter)
+    x = np.asanyarray(x) if in_place else np.array(x)
+    r = np.random.randn(*x.shape)
+    r *= scatter
+    x += r
     return x
 
 def rematch(catalog1, catalog2, greatest_first=True, \
