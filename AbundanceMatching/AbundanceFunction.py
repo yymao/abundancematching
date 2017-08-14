@@ -2,12 +2,12 @@ __all__ = ['AbundanceFunction', 'add_scatter', 'rematch', 'LF_SCATTER_MULT']
 import numpy as np
 from scipy.optimize import curve_fit
 
+_error_import_fiducial_deconvolute = None
 try:
     from fiducial_deconv_wrapper import fiducial_deconvolute
-except (OSError, ImportError):
-    _has_fiducial_deconvolute = False
-else:
-    _has_fiducial_deconvolute = True
+except Exception as inst:
+    _error_import_fiducial_deconvolute = inst
+
 
 LF_SCATTER_MULT = 2.5
 
@@ -39,7 +39,7 @@ def add_scatter(x, scatter, in_place=False):
     scatter : float
         Standard deviation (sigma) of the Gaussian.
     in_place : bool, optional
-        Whether to add the scatter to x in place or return a 
+        Whether to add the scatter to x in place or return a
         new array.
 
     Returns
@@ -56,30 +56,30 @@ def add_scatter(x, scatter, in_place=False):
 def rematch(catalog1, catalog2, greatest_first=True, \
         catalog2_sorted=False):
     """
-    Substitute the values in catalog1 with the values in catalog2, 
-    accroding to the ranks of both arrays. Values of NaN and INF are 
+    Substitute the values in catalog1 with the values in catalog2,
+    accroding to the ranks of both arrays. Values of NaN and INF are
     excluded automatically.
 
     Parameters
     ----------
     catalog1 : array_like
-        1-d array in which all the finite values to be substituted by the 
+        1-d array in which all the finite values to be substituted by the
         values in catalog2.
 
     catalog2 : array_like
-        1-d array in which the values to be substituted for the values in 
+        1-d array in which the values to be substituted for the values in
         catalog1.
 
     greatest_first : bool, optional
         If True (default), the assignment starts with the greatest values.
 
-    catalog2_sorted : bool, opional
+    catalog2_sorted : bool, optional
         If True, do not re-sort catalog2 again.
 
     Returns
     -------
     catalog : ndarray
-        An array that has the same size as catalog1, and all the values are 
+        An array that has the same size as catalog1, and all the values are
         substitute by the values in catalog2, according to the ranks.
     """
     arr2 = np.asarray(catalog2)
@@ -109,7 +109,7 @@ class AbundanceFunction:
             faint_end_first=False, faint_end_slope='fit', \
             faint_end_fit_points=3, bright_end_fit_points=-1):
         """
-        This class can interpolate and extrapolate an abundance function, 
+        This class can interpolate and extrapolate an abundance function,
         and also provides fiducial deconvolution and abundance matching.
 
         Parameters
@@ -122,8 +122,8 @@ class AbundanceFunction:
             The integrate phi over x should result in number density.
             `x` and `phi` must have the same size.
         ext_range : tuple, optional
-            The minimal and maximal value in x to extrapolate abundance 
-            function. 
+            The minimal and maximal value in x to extrapolate abundance
+            function.
         nbin : int, optional
             Number of points to interpolate the abundance function.
         faint_end_first : bool, optional
@@ -138,15 +138,15 @@ class AbundanceFunction:
         bright_end_fit_points : int, optional
             Number of points to fit the bright end.
             If -1 (default), use all data to fit.
-        
+
         Notes
         -----
-        To do abundance matching, see member functions `deconvolute` 
+        To do abundance matching, see member functions `deconvolute`
         and `match`.
         """
         x = np.ravel(x)
         phi_log = np.log(phi).flatten()
-        
+
         if len(x) != len(phi_log):
             raise ValueError('`x` and `phi` must have the same size!')
 
@@ -173,7 +173,7 @@ class AbundanceFunction:
             x = x[::-1]
             phi_log = phi_log[::-1]
             ext_min, ext_max = ext_max, ext_min
-        
+
         x_new = np.linspace(ext_min, ext_max, num=int(nbin)+1)
         dx = _diff(x)
         if all(dx > 0): #like luminosity
@@ -186,7 +186,7 @@ class AbundanceFunction:
             faint_end_flag = (x_new < x[-1])
         else:
             raise ValueError('x must be a strictly monotonic array.')
-        
+
         self._s = slice(None, None, -1 if self._x_flipped else None)
 
         phi_log_new = np.empty_like(x_new)
@@ -235,7 +235,7 @@ class AbundanceFunction:
 
     def __call__(self, x):
         """
-        Return the abundnace values at x, i.e. phi(x).
+        Return the abundance values at x, i.e. phi(x).
 
         Parameters
         ----------
@@ -245,7 +245,7 @@ class AbundanceFunction:
         Returns
         -------
         phi : array_like
-            The abundnace values at x.
+            The abundance values at x.
         """
         return np.exp(np.interp(x, self._x[self._s], self._phi_log[self._s], \
                 np.nan, np.nan))
@@ -259,8 +259,8 @@ class AbundanceFunction:
         x : array_like
             The abundance proxy, usually is magnitude or log(stellar mass).
         scatter : float, optional
-            If not zero, it uses an abundance function that has been 
-            deconvoluted with this amount of scatter. 
+            If not zero, it uses an abundance function that has been
+            deconvoluted with this amount of scatter.
             Must run `deconvolute` before calling this function.
 
         Returns
@@ -288,8 +288,8 @@ class AbundanceFunction:
         nd : array_like
             Number densities.
         scatter : float, optional
-            If not zero, it uses an abundance function that has been 
-            deconvoluted with this amount of scatter. 
+            If not zero, it uses an abundance function that has been
+            deconvoluted with this amount of scatter.
             Must run `deconvolute` before calling this function.
         do_add_scatter : bool, optional
             Add scatter to the final catalog.
@@ -332,14 +332,14 @@ class AbundanceFunction:
             Standard deviation (sigma) of the Gaussian, in the unit of x.
         repeat : int, optional
             Number of times to repeat fiducial deconvolute process.
-            This value can change the result significantly. 
+            This value can change the result significantly.
             *Always* check a reasonable value is used.
         sm_step : float, optional
             Some parameter used in fiducial_deconvolute.
             Using 0.01 or 0.005 is fine.
         return_remainder : bool, optional
             If True, calculate the remainder of this deconvolution.
-            *Always* check the reminder is reasonable before 
+            *Always* check the reminder is reasonable before
             doing abundance matching.
 
         Returns
@@ -347,8 +347,8 @@ class AbundanceFunction:
         remainder : array_like
             Returned only if `return_remainder` is True.
         """
-        if not _has_fiducial_deconvolute:
-            raise NotImplementedError('Make sure you compliled fiducial_deconvolute.')
+        if _error_import_fiducial_deconvolute is not None:
+            raise _error_import_fiducial_deconvolute
 
         af_key = np.empty(len(self._x), float)
         af_val = np.empty_like(af_key)
@@ -401,4 +401,3 @@ class AbundanceFunction:
             Number density, i.e. int phi(x) dx.
         """
         return self._x, np.exp(self._nd_log)
-
