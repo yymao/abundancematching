@@ -8,7 +8,7 @@ _double_ctype = C.ndpointer(np.float64, ndim=1, flags='C')
 
 # load the c library
 here = os.path.abspath(os.path.dirname(__file__))
-_C_LIB = C.load_library('fiducial_deconvolute', here)
+_C_LIB = C.ctypes.cdll[os.path.join(here, 'fiducial_deconvolute.so')]
 _C_LIB.convolved_fit.restype = None
 _C_LIB.convolved_fit.argtypes = [_double_ctype, _double_ctype, C.ctypes.c_int, \
         _double_ctype, _double_ctype, C.ctypes.c_int, C.ctypes.c_double,\

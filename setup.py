@@ -3,7 +3,7 @@ Project website: https://bitbucket.org/yymao/abundancematching
 Copyright (c) 2015 Yao-Yuan Mao (yymao)
 """
 
-from setuptools import setup, find_packages
+from setuptools import setup
 import os
 from subprocess import check_call
 
@@ -17,7 +17,7 @@ check_call(_make_pre + [cpath+'.c', '-o', cpath+'.so'] + _make_post)
 
 setup(
     name='AbundanceMatching',
-    version='0.1.4',
+    version='0.1.5',
     description='A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution (with Peter Behroozi\'s implmentation) and abundance matching.',
     url='https://bitbucket.org/yymao/abundancematching',
     author='Yao-Yuan Mao, Peter Behroozi',
