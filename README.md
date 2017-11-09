@@ -5,7 +5,7 @@ A python module to create (interpolate and extrapolate) abundance functions and 
 
 ## Installation
 
-    pip install https://bitbucket.org/yymao/abundancematching/get/master.zip
+    pip install AbundanceMatching
 
 ## Example
 
