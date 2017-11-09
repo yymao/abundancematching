@@ -1,21 +1,26 @@
-__all__ = ['AbundanceFunction', 'add_scatter', 'rematch', 'LF_SCATTER_MULT']
 import numpy as np
 from scipy.optimize import curve_fit
 
 _error_import_fiducial_deconvolute = None
 try:
-    from fiducial_deconv_wrapper import fiducial_deconvolute
+    from .fiducial_deconv_wrapper import fiducial_deconvolute
 except Exception as inst:
     _error_import_fiducial_deconvolute = inst
 
 
+__all__ = ['AbundanceFunction', 'add_scatter', 'rematch', 'LF_SCATTER_MULT']
+
+
 LF_SCATTER_MULT = 2.5
+
 
 def _diff(a):
     return a[1:]-a[:-1]
 
+
 def _bright_end_func(x, a, b, c, d):
     return -np.exp(a*x+b) + c*x + d
+
 
 def _convolve_gaussian(y, sigma, truncate=4):
     sd = float(sigma)
@@ -27,6 +32,7 @@ def _convolve_gaussian(y, sigma, truncate=4):
     weights /= weights.sum()
     y_full = np.concatenate((np.zeros(size), y, np.ones(size)*y[-1]))
     return np.convolve(y_full, weights, 'valid')
+
 
 def add_scatter(x, scatter, in_place=False):
     """
@@ -52,6 +58,7 @@ def add_scatter(x, scatter, in_place=False):
     r *= scatter
     x += r
     return x
+
 
 def rematch(catalog1, catalog2, greatest_first=True, \
         catalog2_sorted=False):
@@ -97,6 +104,7 @@ def rematch(catalog1, catalog2, greatest_first=True, \
     arr1[f[s[len(arr2):]]] = np.nan
     return arr1
 
+
 def _to_float(x, default=np.nan):
     try:
         xf = float(x)
@@ -104,7 +112,8 @@ def _to_float(x, default=np.nan):
         return default
     return xf
 
-class AbundanceFunction:
+
+class AbundanceFunction(object):
     def __init__(self, x, phi, ext_range=(None, None), nbin=1000, \
             faint_end_first=False, faint_end_slope='fit', \
             faint_end_fit_points=3, bright_end_fit_points=-1):

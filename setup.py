@@ -1,6 +1,6 @@
 """
 Project website: https://bitbucket.org/yymao/abundancematching
-Copyright (c) 2015 Yao-Yuan Mao (yymao)
+Copyright (c) 2015--2017 Yao-Yuan Mao (yymao)
 """
 
 from setuptools import setup
@@ -14,14 +14,18 @@ here = os.path.abspath(os.path.dirname(__file__))
 cpath = os.path.join(here, 'AbundanceMatching', 'fiducial_deconvolute')
 check_call(_make_pre + [cpath+'.c', '-o', cpath+'.so'] + _make_post)
 
+with open(os.path.join(here, 'AbundanceMatching', 'version.py')) as f:
+    exec(f.read())
+
 
 setup(
     name='AbundanceMatching',
-    version='0.1.5',
+    version=__version__,
     description='A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution (with Peter Behroozi\'s implmentation) and abundance matching.',
     url='https://bitbucket.org/yymao/abundancematching',
-    author='Yao-Yuan Mao, Peter Behroozi',
-    author_email='Yao-Yuan Mao <yymao@alumni.stanford.edu>',
+    download_url = 'https://bitbucket.org/yymao/abundancematching/get/v0.2.0.tar.gz',
+    author='Yao-Yuan Mao',
+    author_email='yymao.astro@gmail.com',
     license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -29,10 +33,10 @@ setup(
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 2 :: Only',
+        'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering :: Astronomy',
     ],
-    use_2to3=True,
+    use_2to3=False,
     packages=['AbundanceMatching'],
     package_data={
         'AbundanceMatching': ['fiducial_deconvolute.so'],

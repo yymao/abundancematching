@@ -1,7 +1,8 @@
-__all__ = ['fiducial_deconvolute']
 import os
 import numpy as np
 import numpy.ctypeslib as C
+
+__all__ = ['fiducial_deconvolute']
 
 # define types
 _double_ctype = C.ndpointer(np.float64, ndim=1, flags='C')
@@ -13,6 +14,7 @@ _C_LIB.convolved_fit.restype = None
 _C_LIB.convolved_fit.argtypes = [_double_ctype, _double_ctype, C.ctypes.c_int, \
         _double_ctype, _double_ctype, C.ctypes.c_int, C.ctypes.c_double,\
         C.ctypes.c_int, C.ctypes.c_double]
+
 
 def fiducial_deconvolute(af_key, af_val, smm, mf, scatter, repeat=40, sm_step=0.01):
     if len(smm) != len(mf):
@@ -29,4 +31,3 @@ def fiducial_deconvolute(af_key, af_val, smm, mf, scatter, repeat=40, sm_step=0.
         smm -= offset
         af_key -= offset
     return smm
-

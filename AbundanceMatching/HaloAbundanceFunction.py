@@ -1,5 +1,7 @@
-__all__ = ['HaloAbundanceFunction', 'calc_number_densities', 'calc_number_densities_in_bins']
 import numpy as np
+
+__all__ = ['HaloAbundanceFunction', 'calc_number_densities', 'calc_number_densities_in_bins']
+
 
 def _to_float(x, default=np.nan, take_log=False):
     try:
@@ -7,6 +9,7 @@ def _to_float(x, default=np.nan, take_log=False):
     except (ValueError, TypeError):
         return default
     return np.log(xf) if take_log else xf
+
 
 def calc_number_densities(x, box_size):
     """
@@ -32,9 +35,10 @@ def calc_number_densities(x, box_size):
     nd[np.argsort(x)] = np.linspace(N*inv_vol, inv_vol, N)
     return nd
 
+
 def calc_number_densities_in_bins(x, box_size, bins):
     """
-    Given a list of values, calculate the number densities of 
+    Given a list of values, calculate the number densities of
     at the positions of `bins`.
     Number density =  rank / volumn.
 
@@ -47,7 +51,7 @@ def calc_number_densities_in_bins(x, box_size, bins):
         The length of the cubic cosmological box.
     bins : array_like
         The position (in x) to calculate the number densities for.
-    
+
     Returns
     -------
     nd : array_like
@@ -55,7 +59,8 @@ def calc_number_densities_in_bins(x, box_size, bins):
     """
     return (len(x) - np.searchsorted(x, bins, sorter=np.argsort(x))).astype(float)/(box_size**3)
 
-class HaloAbundanceFunction:
+
+class HaloAbundanceFunction(object):
     def __init__(self, x, box_size, fit_range=(None, None), fit_points=10,\
             nbin=200, log_bins=True):
         """
@@ -90,7 +95,7 @@ class HaloAbundanceFunction:
 
         bins = np.linspace(min(x.min(), fit_to), x.max(), int(nbin)+1)
         nd = calc_number_densities_in_bins(x, box_size, bins)
- 
+
         if fit_to < fit_below:
             dlog_nd = np.gradient(np.log(nd))
             dx = (bins[-1]-bins[0])/int(nbin)
@@ -133,4 +138,3 @@ class HaloAbundanceFunction:
             Number densities at x.
         """
         return np.exp(self._x), np.exp(self._nd_log)
-
