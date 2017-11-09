@@ -23,7 +23,7 @@ setup(
     version=__version__,
     description='A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution (with Peter Behroozi\'s implmentation) and abundance matching.',
     url='https://bitbucket.org/yymao/abundancematching',
-    download_url = 'https://bitbucket.org/yymao/abundancematching/get/v0.2.0.tar.gz',
+    download_url = 'https://bitbucket.org/yymao/abundancematching/get/v0.2.1.tar.gz',
     author='Yao-Yuan Mao',
     author_email='yymao.astro@gmail.com',
     license='MIT',
@@ -39,7 +39,7 @@ setup(
     use_2to3=False,
     packages=['AbundanceMatching'],
     package_data={
-        'AbundanceMatching': ['fiducial_deconvolute.so'],
+        'AbundanceMatching': ['fiducial_deconvolute.c', 'fiducial_deconvolute.so'],
     },
     install_requires = ['numpy','scipy'],
 )
