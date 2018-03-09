@@ -16,8 +16,11 @@ Here's an example to do abundance matching with this code.
     #Assume you also have a luminosity function table `lf`, 
     #whose first column st column is the quantity to match (e.g. magnitude), 
     #and the second column is the abundance (per Mpc^3 per Mag).
-    
-    import matplotlib.pyploy as plt
+    try: 
+        xrange
+    except NameError:
+        xrange = range
+    import matplotlib.pyplot as plt
     from AbundanceMatching import *
     af = AbundanceFunction(lf[:,0], lf[:,1], (-27, -5))
     
@@ -30,7 +33,7 @@ Here's an example to do abundance matching with this code.
     scatter = 0.2
     remainder = af.deconvolute(scatter*LF_SCATTER_MULT, 20)
     x, nd = af.get_number_density_table()
-    plot(x, remainder/nd);
+    plt.plot(x, remainder/nd);
     
     #get number densities of the halo catalog
     nd_halos = calc_number_densities(halos['vpeak'], box_size)
