@@ -1,29 +1,27 @@
 """
-Project website: https://bitbucket.org/yymao/abundancematching
-Copyright (c) 2015--2017 Yao-Yuan Mao (yymao)
+Project website: https://github.com/yymao/abundancematching
+Copyright (c) 2015-2020 Yao-Yuan Mao (yymao)
 """
 
-from setuptools import setup
 import os
-from subprocess import check_call
+from setuptools import setup, Extension
 
+module_fd = Extension(
+    'AbundanceMatching._fiducial_deconvolute',
+    libraries=['m'],
+    extra_compile_args=["-std=c99", "-fno-math-errno"],
+    sources=['AbundanceMatching/fiducial_deconvolute.c'],
+)
 
-_make_pre = 'gcc -D_BSD_SOURCE -D_POSIX_SOURCE -D_POSIX_C_SOURCE=200809L -D_SVID_SOURCE -D_DARWIN_C_SOURCE -Wall -fno-math-errno -fPIC -shared'.split()
-_make_post = '-lm -O3 -std=c99'.split()
-here = os.path.abspath(os.path.dirname(__file__))
-cpath = os.path.join(here, 'AbundanceMatching', 'fiducial_deconvolute')
-check_call(_make_pre + [cpath+'.c', '-o', cpath+'.so'] + _make_post)
-
-with open(os.path.join(here, 'AbundanceMatching', 'version.py')) as f:
+with open(os.path.join(os.path.dirname(__file__), 'AbundanceMatching', 'version.py')) as f:
     exec(f.read())
-
 
 setup(
     name='AbundanceMatching',
-    version=__version__,
-    description='A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution (with Peter Behroozi\'s implmentation) and abundance matching.',
-    url='https://bitbucket.org/yymao/abundancematching',
-    download_url = 'https://bitbucket.org/yymao/abundancematching/get/v0.2.1.tar.gz',
+    version=__version__,  # pylint: disable=undefined-variable # noqa: F821
+    description='A Python package for subhalo abundance matching (SHAM) with scatter. It creates abundance functions and runs Peter Behroozi\'s fiducial deconvolution code.',
+    url='https://github.com/yymao/abundancematching',
+    download_url='https://github.com/yymao/abundancematching/archive/v{}.tar.gz'.format(__version__),  # pylint: disable=undefined-variable # noqa: F821
     author='Yao-Yuan Mao',
     author_email='yymao.astro@gmail.com',
     license='MIT',
@@ -38,8 +36,6 @@ setup(
     ],
     use_2to3=False,
     packages=['AbundanceMatching'],
-    package_data={
-        'AbundanceMatching': ['fiducial_deconvolute.c', 'fiducial_deconvolute.so'],
-    },
-    install_requires = ['numpy','scipy'],
+    install_requires=['numpy >=1.9.0', 'scipy >=0.15.0'],
+    ext_modules=[module_fd],
 )
