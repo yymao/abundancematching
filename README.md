@@ -8,7 +8,7 @@ A python module to create (interpolate and extrapolate) abundance functions and 
 ## Installation
 
 ```bash
-pip install AbundanceMatching
+pip install abundancematching
 ```
 
 ## Example
