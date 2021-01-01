@@ -18,10 +18,10 @@ with open(os.path.join(os.path.dirname(__file__), 'AbundanceMatching', 'version.
 
 setup(
     name='AbundanceMatching',
-    version=__version__,
+    version=__version__,  # pylint: disable=undefined-variable # noqa: F821
     description='A Python package for subhalo abundance matching (SHAM) with scatter. It creates abundance functions and runs Peter Behroozi\'s fiducial deconvolution code.',
     url='https://github.com/yymao/abundancematching',
-    download_url='https://github.com/yymao/abundancematching/archive/v{}.tar.gz'.format(__version__),
+    download_url='https://github.com/yymao/abundancematching/archive/v{}.tar.gz'.format(__version__),  # pylint: disable=undefined-variable # noqa: F821
     author='Yao-Yuan Mao',
     author_email='yymao.astro@gmail.com',
     license='MIT',
