@@ -1,4 +1,11 @@
-import os
+try:
+    from importlib.util import find_spec
+except ImportError:
+    from imp import find_module
+    _FD_LIB_PATH = find_module("_fiducial_deconvolute", [find_module("AbundanceMatching")[1]])[1]
+else:
+    _FD_LIB_PATH = find_spec("AbundanceMatching._fiducial_deconvolute").origin
+
 import numpy as np
 import numpy.ctypeslib as C
 
@@ -8,8 +15,7 @@ __all__ = ['fiducial_deconvolute']
 _double_ctype = C.ndpointer(np.float64, ndim=1, flags='C')
 
 # load the c library
-here = os.path.abspath(os.path.dirname(__file__))
-_C_LIB = C.ctypes.cdll[os.path.join(here, 'fiducial_deconvolute.so')]
+_C_LIB = C.ctypes.cdll[_FD_LIB_PATH]
 _C_LIB.convolved_fit.restype = None
 _C_LIB.convolved_fit.argtypes = [_double_ctype, _double_ctype, C.ctypes.c_int, \
         _double_ctype, _double_ctype, C.ctypes.c_int, C.ctypes.c_double,\

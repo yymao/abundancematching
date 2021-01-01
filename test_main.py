@@ -43,5 +43,16 @@ _lf = np.fromstring(_lf_table, sep=' ').reshape(-1, 2)
 
 _lf[:,1] = 10.0**_lf[:,1]
 
+
 def test_AbundanceFunction():
     af = AbundanceFunction(*_lf.T, ext_range=(-25, -16))
+
+
+def test_deconv():
+    af = AbundanceFunction(*_lf.T, ext_range=(-25, -16))
+    af.deconvolute(0.2*LF_SCATTER_MULT, 20)
+
+
+if __name__ == "__main__":
+    test_AbundanceFunction()
+    test_deconv()
