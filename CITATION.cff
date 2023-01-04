@@ -1,0 +1,27 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: AbundanceMatching
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - family-names: Mao
+    given-names: Yao-Yuan
+    orcid: 'https://orcid.org/0000-0002-1200-0820'
+  - family-names: Behroozi
+    given-names: Peter
+    orcid: 'https://orcid.org/0000-0002-2517-6446'
+identifiers:
+  - type: url
+    value: 'https://ascl.net/2212.016'
+repository-code: 'https://github.com/yymao/abundancematching'
+abstract: >-
+  The AbundanceMatching Python module creates
+  (interpolates and extrapolates) abundance functions
+  and also provides fiducial deconvolution and
+  abundance matching.
+license: MIT
+
