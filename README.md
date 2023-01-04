@@ -1,9 +1,11 @@
 # AbundanceMatching
 
-[![PyPI version](https://img.shields.io/pypi/v/AbundanceMatching.svg)](https://pypi.python.org/pypi/AbundanceMatching)
+[![PyPI:AbundanceMatching](https://img.shields.io/pypi/v/AbundanceMatching.svg)](https://pypi.python.org/pypi/AbundanceMatching)
+[![ascl:1604.006](https://img.shields.io/badge/ascl-1604.006-blue.svg?colorB=262255)](https://ascl.net/1604.006)
 
-A python module to create (interpolate and extrapolate) abundance functions and also provide fiducial deconvolution
-(with Peter Behroozi's implementation) and abundance matching.
+A python module that implements subhalo abundance matching. 
+This module can interpolate and extrapolate abundance functions (e.g., stellar mass function, halo mass function) 
+and provides Peter Behroozi's fiducial deconvolution implementation ([Behroozi et al. 2010](https://ui.adsabs.harvard.edu/abs/2010ApJ...717..379B/abstract)).
 
 ## Installation
 
