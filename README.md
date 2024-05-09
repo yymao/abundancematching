@@ -22,7 +22,7 @@ Here's an example to do abundance matching with this code.
 Assume you have a numpy structured array `halos`,
 which contains a list of halos, with labels of the quantity names.
 Assume you also have a luminosity function table `lf`,
-whose first column st column is the quantity to match (e.g. magnitude),
+whose first column is the quantity to match (e.g. magnitude),
 and the second column is the abundance (per Mpc^3 per Mag).
 """
 
