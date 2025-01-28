@@ -27,7 +27,7 @@ and the second column is the abundance (per Mpc^3 per Mag).
 """
 
 import matplotlib.pyplot as plt
-from AbundanceMatching import AbundanceFunction, LF_SCATTER_MULT, calc_number_densities
+from AbundanceMatching import AbundanceFunction, LF_SCATTER_MULT, calc_number_densities, add_scatter, rematch
 
 af = AbundanceFunction(lf[:,0], lf[:,1], (-27, -5))
 
@@ -43,6 +43,7 @@ x, nd = af.get_number_density_table()
 plt.plot(x, remainder/nd);
 
 # get number densities of the halo catalog
+box_size = 100 
 nd_halos = calc_number_densities(halos['vpeak'], box_size)
 
 # do abundance matching with no scatter
